@@ -1,0 +1,342 @@
+{
+	"info": {
+		"_postman_id": "e163a567-d0ad-40b6-858b-312c7a41a4ad",
+		"name": "Automation- Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var id = \"10\"+ \"{{$randomInt}}\";",
+							"pm.globals.set(\"eid\",id);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"testcase1\", function(){",
+							"    var jsonData = pm.response.json();",
+							"    pm.globals.set(\"eid\",jsonData.id);",
+							"});",
+							"",
+							"//check if the status is 200",
+							"pm.test(\"Validate status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"//check if user has been created",
+							"pm.test(\"Validate Response\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(101);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"id\": \"{{eid}}\",\n    \"title\": \"NewTitle\",\n    \"body\": \"because he receives and accepts the accepted consequences that are unencumbered and when he finds annoyance\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				},
+				"description": "Create a user with given information."
+			},
+			"response": []
+		},
+		{
+			"name": "Get the customer with id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//check if the status is 200",
+							"pm.test(\"Validate status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"1"
+					]
+				},
+				"description": "This GET request returns you the data with the particular id"
+			},
+			"response": []
+		},
+		{
+			"name": "Update the user record ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//check if the status is 200",
+							"pm.test(\"Validate status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"//check if user has been updated",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Update Title\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userId\": 1,\n  \"id\": 1,\n  \"title\": \"Update Title\",\n  \"body\": \"Update Body\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"1"
+					]
+				},
+				"description": "Update the particular user "
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//check if the status is 200",
+							"pm.test(\"Validate status code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"1"
+					]
+				},
+				"description": "Delete the particular user with id"
+			},
+			"response": []
+		},
+		{
+			"name": "GET NegativeTest ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//check if the status is 404",
+							"pm.test(\"Validate status code\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/idontexist",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"idontexist"
+					]
+				},
+				"description": "If id doesn't exist it should return no data"
+			},
+			"response": []
+		},
+		{
+			"name": "Validation the schema- POST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//check if the status is 200",
+							"pm.test(\"Validate status code\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"//Schema validation",
+							"var schema = {",
+							"    \"$schema\": \"http://json-schema.org/draft-07/schema\",",
+							"    \"$id\": \"http://example.com/example.json\",",
+							"    \"type\": \"object\",",
+							"    \"title\": \"The root schema\",",
+							"    \"description\": \"The root schema comprises the entire JSON document.\",",
+							"    \"default\": {},",
+							"    \"examples\": [",
+							"        {",
+							"            \"userId\": 1,",
+							"            \"id\": 1,",
+							"            \"title\": \"sunt aut facere repellat provident occaecati excepturi optio reprehenderit\",",
+							"            \"body\": \"quia et suscipit\\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto\"",
+							"        }",
+							"    ],",
+							"    \"required\": [",
+							"        \"userId\",",
+							"        \"id\",",
+							"        \"title\",",
+							"        \"body\"",
+							"    ],",
+							"    \"properties\": {",
+							"        \"userId\": {",
+							"            \"$id\": \"#/properties/userId\",",
+							"            \"type\": \"integer\",",
+							"            \"title\": \"The userId schema\",",
+							"            \"description\": \"An explanation about the purpose of this instance.\",",
+							"            \"default\": 0,",
+							"            \"examples\": [",
+							"                1",
+							"            ]",
+							"        },",
+							"        \"id\": {",
+							"            \"$id\": \"#/properties/id\",",
+							"            \"type\": \"integer\",",
+							"            \"title\": \"The id schema\",",
+							"            \"description\": \"An explanation about the purpose of this instance.\",",
+							"            \"default\": 0,",
+							"            \"examples\": [",
+							"                1",
+							"            ]",
+							"        },",
+							"        \"title\": {",
+							"            \"$id\": \"#/properties/title\",",
+							"            \"type\": \"string\",",
+							"            \"title\": \"The title schema\",",
+							"            \"description\": \"An explanation about the purpose of this instance.\",",
+							"            \"default\": \"\",",
+							"            \"examples\": [",
+							"                \"sunt aut facere repellat provident occaecati excepturi optio reprehenderit\"",
+							"            ]",
+							"        },",
+							"        \"body\": {",
+							"            \"$id\": \"#/properties/body\",",
+							"            \"type\": \"string\",",
+							"            \"title\": \"The body schema\",",
+							"            \"description\": \"An explanation about the purpose of this instance.\",",
+							"            \"default\": \"\",",
+							"            \"examples\": [",
+							"                \"quia et suscipit\\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto\"",
+							"            ]",
+							"        }",
+							"    },",
+							"    \"additionalProperties\": true",
+							"};",
+							"",
+							"var jsonResponse = pm.response.json();",
+							" ",
+							"",
+							"pm.test('Validate the schema of POST', function () {",
+							"    pm.expect(tv4.validate(jsonResponse , schema)).to.be.true;",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"id\": \"{{eid}}\",\n   \n    \"body\": \"because he receives and accepts the accepted consequences that are unencumbered and when he finds annoyance\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Json Schema needs objects to have all the properties\nIf \"Title\" property is missing in response then test fails"
+			},
+			"response": []
+		}
+	]
+}
